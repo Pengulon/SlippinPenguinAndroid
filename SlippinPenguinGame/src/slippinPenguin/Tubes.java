@@ -39,13 +39,17 @@ public class Tubes {
 	
 	public void update() {
 		
-		if(tubey >= 500 ) {
-			reset();
-		}
 		tubey += speed;
 		rleft.setLocation(tubex - 500, tubey);
 		rright.setLocation(tubex + 100, tubey);
+		if(tubey >= 600 ) {
+			reset();
+		}
 		
+	}
+	
+	public int getTubeCenter() {
+		return tubex + 50;
 	}
 
 	public void setTubex(int tubex) {
