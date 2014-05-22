@@ -7,11 +7,12 @@ public class Tubes {
 	private int tubex;
 	private int tubey;
 	private int speed = 1;
+	private static int tubePass = 0;
 	
 	private Rectangle rleft;
 	private Rectangle rright;
 	
-	private int recHeight = 50;
+	private int recHeight = 80;
 	private int recWidth = 500;
 	
 	public Tubes() {
@@ -25,7 +26,7 @@ public class Tubes {
 
 	public int newInt() {
 		
-		int randInt = 0 + (int)(Math.random()*400);
+		int randInt = 30 + (int)(Math.random()*350);
 		return randInt;
 		
 	}
@@ -33,7 +34,7 @@ public class Tubes {
 	public void reset() {
 		
 		tubex = newInt(); 
-		tubey = 0;
+		tubey = -100;
 		
 	}
 	
@@ -42,8 +43,9 @@ public class Tubes {
 		tubey += speed;
 		rleft.setLocation(tubex - 500, tubey);
 		rright.setLocation(tubex + 100, tubey);
-		if(tubey >= 600 ) {
+		if(tubey >= 900 ) {
 			reset();
+			tubePass++;
 		}
 		
 	}
@@ -82,6 +84,18 @@ public class Tubes {
 
 	public void setRright(Rectangle rright) {
 		this.rright = rright;
+	}
+
+	public static int getTubePass() {
+		return tubePass;
+	}
+
+	public static void setTubePass(int tubePass) {
+		Tubes.tubePass = tubePass;
+	}
+
+	public int getRecHeight() {
+		return recHeight;
 	}
 	
 }

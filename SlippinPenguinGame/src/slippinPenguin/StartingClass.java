@@ -15,18 +15,14 @@ public class StartingClass {
 	public void start() {
 		
 		penguin = new Penguin();
-		penguinBox.height = 22;
-		penguinBox.width = 20;		
+		penguinBox.height = 42;
+		penguinBox.width = 40;		
 		
 		tube = new Tubes[5];
-		for(int i = 0; i < 5; i++) {
+		for(int i = 0; i < tube.length; i++) {
 			tube[i] = new Tubes();
-			tube[i].setTubey((-150)*i);
+			tube[i].setTubey((-200)*i);
 		}
-		
-	}
-	
-	public void run() {
 		
 	}
 
@@ -41,7 +37,7 @@ public class StartingClass {
 	public void stop() {
 		
 		penguin = null;
-		for(int i = 0; i < 5; i++) {
+		for(int i = 0; i < tube.length; i++) {
 			tube[i] = null;
 		}
 		
@@ -50,7 +46,7 @@ public class StartingClass {
 	public boolean alive() {
 		if(penguin.isAlive()) {
 			
-			for(int i = 0; i < 5; i++) {
+			for(int i = 0; i < tube.length; i++) {
 				tube[i].update();
 			}	
 			return true;
@@ -62,7 +58,7 @@ public class StartingClass {
     
     public void checkCollision() {
     	penguinBox.setLocation(penguin.getCenterX(), penguin.getCenterY());
-    	for(int i = 0; i < 5; i++) {
+    	for(int i = 0; i < tube.length; i++) {
     		if(penguinBox.intersects(tube[i].getRleft()) || penguinBox.intersects(tube[i].getRright())) {
     			penguin.finish();
     		}

@@ -2,7 +2,7 @@ package slippinPenguin;
 
 public class Penguin {
 
-    final int GROUND = 382;
+    final int GROUND = 750;
     
     private int centerX = 100;
     private int centerY = GROUND;
@@ -10,17 +10,19 @@ public class Penguin {
     private double speed = 0;
 
     public void update() {
-    	if(centerX <= 0) {
+    	
+    	if(centerX < 10) {
     		speed = 0;
-    		centerX = 0;
+    		centerX = 10;
     	}
-    	else if(centerX >= 480) {
+    	else if(centerX > 430) {
     		speed = 0;
-    		centerX = 480;
+    		centerX = 430;
     	}
     	else {
     		centerX += speed;
     	}
+    	
     }
 
     public void finish() {
@@ -49,6 +51,14 @@ public class Penguin {
     
     public void setAlive(boolean alive) {
     	this.alive = alive;
-    }      
+    }
+
+	public double getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(double speed) {
+		this.speed = speed;
+	}      
 
 }
