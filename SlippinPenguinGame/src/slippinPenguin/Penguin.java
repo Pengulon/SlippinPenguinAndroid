@@ -2,9 +2,9 @@ package slippinPenguin;
 
 public class Penguin {
 
-    final int GROUND = 750;
+    final int GROUND = 650;
     
-    private int centerX = 100;
+    private int centerX = 200;
     private int centerY = GROUND;
     private boolean alive = true;
     private double speed = 0;

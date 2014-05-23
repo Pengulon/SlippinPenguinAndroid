@@ -1,11 +1,13 @@
 package slippinPenguin;
 
 import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class StartingClass {
+public class StartingClass implements KeyListener{
 
 	private Penguin penguin;
-	private Tubes tube[];
+	private Walls wall[];
 	private Rectangle penguinBox = new Rectangle();
 
 	public void init() {
@@ -18,10 +20,10 @@ public class StartingClass {
 		penguinBox.height = 42;
 		penguinBox.width = 40;		
 		
-		tube = new Tubes[5];
-		for(int i = 0; i < tube.length; i++) {
-			tube[i] = new Tubes();
-			tube[i].setTubey((-200)*i);
+		wall = new Walls[5];
+		for(int i = 0; i < wall.length; i++) {
+			wall[i] = new Walls();
+			wall[i].setWally((-200)*i);
 		}
 		
 	}
@@ -37,19 +39,21 @@ public class StartingClass {
 	public void stop() {
 		
 		penguin = null;
-		for(int i = 0; i < tube.length; i++) {
-			tube[i] = null;
+		for(int i = 0; i < wall.length; i++) {
+			wall[i] = null;
 		}
+		Walls.setwallPass(0);
 		
 	}
 	
 	public boolean alive() {
 		if(penguin.isAlive()) {
 			
-			for(int i = 0; i < tube.length; i++) {
-				tube[i].update();
+			for(int i = 0; i < wall.length; i++) {
+				wall[i].update();
 			}	
 			return true;
+			
 		} 
 		else {
 			return false;
@@ -58,8 +62,8 @@ public class StartingClass {
     
     public void checkCollision() {
     	penguinBox.setLocation(penguin.getCenterX(), penguin.getCenterY());
-    	for(int i = 0; i < tube.length; i++) {
-    		if(penguinBox.intersects(tube[i].getRleft()) || penguinBox.intersects(tube[i].getRright())) {
+    	for(int i = 0; i < wall.length; i++) {
+    		if(penguinBox.intersects(wall[i].getRleft()) || penguinBox.intersects(wall[i].getRright())) {
     			penguin.finish();
     		}
     	}
@@ -67,10 +71,6 @@ public class StartingClass {
 
 	public Penguin getPenguin() {
 		return penguin;
-	}
-
-	public void setPenguin(Penguin penguin) {
-		this.penguin = penguin;
 	}
 
 	public Rectangle getPenguinBox() {
@@ -81,12 +81,46 @@ public class StartingClass {
 		this.penguinBox = penguinBox;
 	}
 
-	public Tubes[] getTube() {
-		return tube;
+	public Walls[] getWall() {
+		return wall;
 	}
 
-	public void setTube(Tubes[] tube) {
-		this.tube = tube;
+	public void setWall(Walls[] wall) {
+		this.wall = wall;
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		if(penguin.isAlive()) {
+			
+			if(arg0.getKeyCode() == KeyEvent.VK_LEFT) {
+				penguin.setSpeed(penguin.getSpeed() - 1);
+			}
+			else if(arg0.getKeyCode() == KeyEvent.VK_RIGHT) {
+				penguin.setSpeed(penguin.getSpeed() + 1);
+			}
+			
+			else if(arg0.getKeyCode() == KeyEvent.VK_KP_UP) {
+				
+			}
+			
+			else if(arg0.getKeyCode() == KeyEvent.VK_KP_DOWN) {
+				
+			}
+			
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
 	}
     
 }

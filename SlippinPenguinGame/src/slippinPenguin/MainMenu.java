@@ -1,38 +1,33 @@
 package slippinPenguin;
 
 import java.applet.Applet;
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.ImageObserver;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 
+import javax.imageio.ImageIO;
 
-public class MainMenu extends Applet implements Runnable, MouseListener, ActionListener, KeyListener{
+
+public class MainMenu extends Applet implements Runnable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6751322658627545895L;
 	private StartingClass sc;
-	private Image image, currentSprite, character, character2, characterHurt, background, tubePic;
+	private Image image, currentSprite, character, character2, characterHurt, background, WallPic, startPic, startHitPic;
 	private Graphics second;
 	private URL base;
 	private static Background bg1;
-	private ImageObserver observer;
 	private boolean inMenu;
 	private boolean inGame;
-	private Button startButton;
 	private Thread thread;
 	private int frameCounter = 0;
+	private StartButton startButton;
 
 	@Override
 	public void init() {
@@ -54,12 +49,17 @@ public class MainMenu extends Applet implements Runnable, MouseListener, ActionL
 		characterHurt = getImage(base, "data/penguinDead.png");
 		currentSprite = character;
 		background = getImage(base, "data/background.png");
-		tubePic = getImage(base, "data/ice.png");
+		WallPic = getImage(base, "data/ice wall.png");
+		try {
+			startPic = ImageIO.read(new File("data/startbutton.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		startHitPic = getImage(base, "data/startbuttonhit.png");
 		
 		inMenu = true;
 		inGame = false;
-		
-		addMouseListener(this);
 		
 	}
 
@@ -71,8 +71,8 @@ public class MainMenu extends Applet implements Runnable, MouseListener, ActionL
 		sc = new StartingClass();
 		sc.start();
 		
-		startButton = new Button();
-		startButton.addActionListener(this);
+		startButton = new StartButton(240, 600, startPic.getWidth(this), startPic.getHeight(this));
+		addMouseListener(startButton);
 		
 		thread = new Thread(this);
 		thread.start();
@@ -82,8 +82,17 @@ public class MainMenu extends Applet implements Runnable, MouseListener, ActionL
 	public void run() {
 		while (true) {
 			
-			bg1.update();
 			if(inMenu) {
+				
+				if(startButton.isMouseClick()) {
+					inMenu = false;
+					inGame = true;
+					System.out.print("Gemu Hajimeru");
+					addKeyListener(sc);
+					setFocusable(true);
+					this.requestFocusInWindow();
+					startButton.setMouseClick(false);
+				}
 				
 			}
 			else if(inGame) {
@@ -110,7 +119,6 @@ public class MainMenu extends Applet implements Runnable, MouseListener, ActionL
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
 		}
 	}
 	
@@ -121,8 +129,6 @@ public class MainMenu extends Applet implements Runnable, MouseListener, ActionL
 		sc.stop();
 		sc = null;
 		startButton = null;
-		removeKeyListener(this);
-		removeMouseListener(this);
 		
 		thread.interrupt();
 		thread = null;
@@ -162,10 +168,13 @@ public class MainMenu extends Applet implements Runnable, MouseListener, ActionL
 			
 		else if(inMenu) {
 			
-			
-			
+			if(startButton.isMouseDown()) {
+				g.drawImage(startHitPic, startButton.getX(), startButton.getY(), startButton.getWidth(), startButton.getHeight(), this);
+			}
+			else {
+				g.drawImage(startPic, startButton.getX(), startButton.getY(), startButton.getWidth(), startButton.getHeight(), this);
+			}
 		}
-		
 		
 	}
 	
@@ -173,16 +182,13 @@ public class MainMenu extends Applet implements Runnable, MouseListener, ActionL
 		
 		g.drawImage(currentSprite, sc.getPenguin().getCenterX(), sc.getPenguin().getCenterY(), this);
 		
-		for(int i = 0; i < sc.getTube().length; i++) {
+		for(int i = 0; i < sc.getWall().length; i++) {
 			
-			int tubeH = tubePic.getHeight(observer)/2;
-			int tubeW = tubePic.getWidth(observer)/2;
+			g.drawImage(WallPic, sc.getWall()[i].getWallCenter(), sc.getWall()[i].getWally(), this);
+			//g.drawRect(sc.getWall()[i].getRleft().x, sc.getWall()[i].getRleft().y, sc.getWall()[i].getRleft().width, sc.getWall()[i].getRleft().height);
+			//g.drawRect(sc.getWall()[i].getRright().x, sc.getWall()[i].getRright().y, sc.getWall()[i].getRright().width, sc.getWall()[i].getRright().height);
 			
-			g.drawImage(tubePic, sc.getTube()[i].getTubeCenter() - tubeW, sc.getTube()[i].getTubey() - tubeH + (sc.getTube()[i].getRecHeight()/2), this);
-			g.drawRect(sc.getTube()[i].getRleft().x, sc.getTube()[i].getRleft().y, sc.getTube()[i].getRleft().width, sc.getTube()[i].getRleft().height);
-			g.drawRect(sc.getTube()[i].getRright().x, sc.getTube()[i].getRright().y, sc.getTube()[i].getRright().width, sc.getTube()[i].getRright().height);
-			
-			g.drawRect(sc.getPenguinBox().x, sc.getPenguinBox().y, sc.getPenguinBox().width, sc.getPenguinBox().height);
+			//g.drawRect(sc.getPenguinBox().x, sc.getPenguinBox().y, sc.getPenguinBox().width, sc.getPenguinBox().height);
 
 		}
 		
@@ -196,83 +202,5 @@ public class MainMenu extends Applet implements Runnable, MouseListener, ActionL
 		sc.stop();
 		sc.start();
 	}
-
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		
-		if(!inGame) {
-			inGame = true;
-			inMenu = false;
-			System.out.print("Gemu hajimeru");
-			addKeyListener(this);
-		}
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-		if(sc.getPenguin().isAlive() && inGame) {
-			
-			if(arg0.getKeyCode() == KeyEvent.VK_LEFT) {
-				sc.getPenguin().setSpeed(sc.getPenguin().getSpeed() - 1);
-			}
-			else if(arg0.getKeyCode() == KeyEvent.VK_RIGHT) {
-				sc.getPenguin().setSpeed(sc.getPenguin().getSpeed() + 1);
-			}
-			
-			else if(arg0.getKeyCode() == KeyEvent.VK_KP_UP) {
-				
-			}
-			
-			else if(arg0.getKeyCode() == KeyEvent.VK_KP_DOWN) {
-				
-			}
-			
-		}
-		
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
 
 }
