@@ -9,10 +9,7 @@ public class StartingClass implements KeyListener{
 	private Penguin penguin;
 	private Walls wall[];
 	private Rectangle penguinBox = new Rectangle();
-
-	public void init() {
-	
-	}
+	private boolean inRestart = false;
 	
 	public void start() {
 		
@@ -42,6 +39,7 @@ public class StartingClass implements KeyListener{
 		for(int i = 0; i < wall.length; i++) {
 			wall[i] = null;
 		}
+		inRestart = false;
 		Walls.setwallPass(0);
 		
 	}
@@ -65,6 +63,7 @@ public class StartingClass implements KeyListener{
     	for(int i = 0; i < wall.length; i++) {
     		if(penguinBox.intersects(wall[i].getRleft()) || penguinBox.intersects(wall[i].getRright())) {
     			penguin.finish();
+    			inRestart = true;
     		}
     	}
     }
@@ -121,6 +120,14 @@ public class StartingClass implements KeyListener{
 	@Override
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
+	}
+
+	public boolean isInRestart() {
+		return inRestart;
+	}
+
+	public void setInRestart(boolean inRestart) {
+		this.inRestart = inRestart;
 	}
     
 }

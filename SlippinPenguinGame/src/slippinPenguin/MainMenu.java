@@ -5,12 +5,7 @@ import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
-
-import javax.imageio.ImageIO;
-
 
 public class MainMenu extends Applet implements Runnable {
 
@@ -19,12 +14,12 @@ public class MainMenu extends Applet implements Runnable {
 	 */
 	private static final long serialVersionUID = 6751322658627545895L;
 	private StartingClass sc;
-	private Image image, currentSprite, character, character2, characterHurt, background, WallPic, startPic, startHitPic;
+	private RestartMenu rMenu;
+	private Image image, currentSprite, character, character2, characterHurt, background, WallPic;
 	private Graphics second;
 	private URL base;
 	private static Background bg1;
-	private boolean inMenu;
-	private boolean inGame;
+	private boolean inMenu, inGame, inRestart;
 	private Thread thread;
 	private int frameCounter = 0;
 	private StartButton startButton;
@@ -50,13 +45,6 @@ public class MainMenu extends Applet implements Runnable {
 		currentSprite = character;
 		background = getImage(base, "data/background.png");
 		WallPic = getImage(base, "data/ice wall.png");
-		try {
-			startPic = ImageIO.read(new File("data/startbutton.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		startHitPic = getImage(base, "data/startbuttonhit.png");
 		
 		inMenu = true;
 		inGame = false;
@@ -70,9 +58,10 @@ public class MainMenu extends Applet implements Runnable {
 		
 		sc = new StartingClass();
 		sc.start();
+		sc.getPenguin().setAlive(true);
 		
-		startButton = new StartButton(240, 600, startPic.getWidth(this), startPic.getHeight(this));
-		addMouseListener(startButton);
+		startButton = new StartButton();
+		addMouseListener(startButton);		
 		
 		thread = new Thread(this);
 		thread.start();
@@ -85,6 +74,7 @@ public class MainMenu extends Applet implements Runnable {
 			if(inMenu) {
 				
 				if(startButton.isMouseClick()) {
+					removeMouseListener(startButton);
 					inMenu = false;
 					inGame = true;
 					System.out.print("Gemu Hajimeru");
@@ -95,23 +85,37 @@ public class MainMenu extends Applet implements Runnable {
 				}
 				
 			}
-			else if(inGame) {
+			else if(inGame && !inRestart) {
 				
-				++frameCounter;
 				sc.update();
 				
-				if(!sc.getPenguin().isAlive()){
+				if(sc.isInRestart()){
 					currentSprite = characterHurt;
+					rMenu = new RestartMenu();
+					addMouseListener(rMenu);
+					removeKeyListener(sc);
+					inRestart = true;
+				}
+				else {
+					
+					++frameCounter;
+					if(frameCounter == 30) {
+						currentSprite = character2;
+					}
+					else if(frameCounter >= 60) {
+						currentSprite = character;
+						frameCounter = 0;
+					}
+					
 				}
 				
-				if(frameCounter == 30) {
-					currentSprite = character2;
+			}
+			
+			else if(inRestart) {
+				if(rMenu.isMouseClick()) {
+					restartGame();
+					addKeyListener(sc);
 				}
-				else if(frameCounter >= 60) {
-					currentSprite = character;
-					frameCounter = 0;
-				}
-				
 			}
 			repaint();
 			try {
@@ -129,6 +133,7 @@ public class MainMenu extends Applet implements Runnable {
 		sc.stop();
 		sc = null;
 		startButton = null;
+		rMenu = null;
 		
 		thread.interrupt();
 		thread = null;
@@ -162,18 +167,16 @@ public class MainMenu extends Applet implements Runnable {
 		
 		g.drawImage(background, bg1.getBgX(), bg1.getBgY(), this);
 
-		if(inGame) {
+		if(inGame && !inRestart) {
 			gamePaint(g);
 		}
 			
 		else if(inMenu) {
-			
-			if(startButton.isMouseDown()) {
-				g.drawImage(startHitPic, startButton.getX(), startButton.getY(), startButton.getWidth(), startButton.getHeight(), this);
-			}
-			else {
-				g.drawImage(startPic, startButton.getX(), startButton.getY(), startButton.getWidth(), startButton.getHeight(), this);
-			}
+			startButton.paint(g, this);
+		}
+		else if(inRestart) {
+			gamePaint(g);
+			rMenu.paint(g, this);
 		}
 		
 	}
@@ -192,15 +195,15 @@ public class MainMenu extends Applet implements Runnable {
 
 		}
 		
-		if(!sc.getPenguin().isAlive()) {
-			restartGame();
-		}
-		
 	}
 	
 	public void restartGame() {
 		sc.stop();
 		sc.start();
+		removeMouseListener(rMenu);
+		rMenu = null;
+		inRestart = false;
+		currentSprite = character;
 	}
 
 }
