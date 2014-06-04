@@ -8,6 +8,16 @@ public class Penguin {
     private int centerY = GROUND;
     private boolean alive = true;
     private double speed = 0;
+    private int x, y, width, height;
+    
+    public Penguin() {
+    	
+    	x = 0;
+    	y = 0;
+    	width = 42;
+    	height = 42;
+    	
+    }
 
     public void update() {
     	
@@ -59,6 +69,38 @@ public class Penguin {
 
 	public void setSpeed(double speed) {
 		this.speed = speed;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
 	}      
 
 }

@@ -1,19 +1,15 @@
 package com.ethanwong.slippinPenguin;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 
-public class StartButton implements MouseListener {
+import com.ethanwong.framework.Graphics;
+import com.ethanwong.framework.Image;
+
+public class StartButton {
 
 	private int x, y, width, height;
 	private boolean mouseOn, mouseDown, mouseClick;
-	private Image startPic, startHitPic;
 
 	public StartButton() {
 		
@@ -22,23 +18,15 @@ public class StartButton implements MouseListener {
 		width = 250;
 		height = 130;
 		
-		try {
-			startPic = ImageIO.read(new File("data/startButton.png"));
-			startHitPic = ImageIO.read(new File("data/startbuttonhit.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 	}
 	
-	public void paint(Graphics g, ImageObserver io) {
+	public void paint(Graphics g) {
 		
 		if(mouseDown && mouseOn) {
-			g.drawImage(startHitPic, x, y, width, height, io);
+			g.drawImage(Assets.startHitPic, x, y, 0, 0, width, height);
 		}
 		else {
-			g.drawImage(startPic, x, y, width, height, io);
+			g.drawImage(Assets.startPic, x, y, 0, 0, width, height);
 		}
 	}
 

@@ -216,11 +216,7 @@ public class GameScreen extends Screen {
 		}
 
 		updateTiles();
-		hb.update();
-		hb2.update();
-		bg1.update();
-		bg2.update();
-		animate();
+		bg.update();
 
 		if (robot.getCenterY() > 500) {
 			state = GameState.GameOver;
@@ -318,42 +314,15 @@ public class GameScreen extends Screen {
 
 	}
 
-	private void paintTiles(Graphics g) {
-		for (int i = 0; i < tilearray.size(); i++) {
-			Tile t = (Tile) tilearray.get(i);
-			if (t.type != 0) {
-				g.drawImage(t.getTileImage(), t.getTileX(), t.getTileY());
-			}
-		}
-	}
-
-	public void animate() {
-		anim.update(10);
-		hanim.update(50);
-	}
-
 	private void nullify() {
 
 		// Set all variables to null. You will be recreating them in the
 		// constructor.
 		paint = null;
-		bg1 = null;
-		bg2 = null;
-		robot = null;
-		hb = null;
-		hb2 = null;
+		bg = null;
 		currentSprite = null;
 		character = null;
 		character2 = null;
-		character3 = null;
-		heliboy = null;
-		heliboy2 = null;
-		heliboy3 = null;
-		heliboy4 = null;
-		heliboy5 = null;
-		anim = null;
-		hanim = null;
-
 		// Call garbage collector to clean up memory.
 		System.gc();
 
@@ -422,19 +391,9 @@ public class GameScreen extends Screen {
 
 	}
 
-	public static Background getBg1() {
+	public static Background getBg() {
 		// TODO Auto-generated method stub
-		return bg1;
-	}
-
-	public static Background getBg2() {
-		// TODO Auto-generated method stub
-		return bg2;
-	}
-
-	public static Robot getRobot() {
-		// TODO Auto-generated method stub
-		return robot;
+		return bg;
 	}
 
 }

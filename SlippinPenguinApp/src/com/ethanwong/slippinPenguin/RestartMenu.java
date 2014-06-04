@@ -1,10 +1,5 @@
 package com.ethanwong.slippinPenguin;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.ImageObserver;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,9 +7,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
+import android.graphics.Color;
 
-public class RestartMenu implements MouseListener{
+import com.ethanwong.framework.Graphics;
+import com.ethanwong.framework.Image;
+
+public class RestartMenu {
 
 	private int x,y, width, height, buttonX, buttonY, buttonWidth, buttonHeight;
 	private boolean mouseOn, mouseDown, mouseClick;
@@ -37,14 +35,6 @@ public class RestartMenu implements MouseListener{
 		buttonHeight = 70;
 		
 		try {
-			restartMenu = ImageIO.read(new File("data/restartMenu.png"));
-			restartMenuHit = ImageIO.read(new File("data/restartMenuHit.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		try {
 			readFile(highScoreFile);
 			Integer.parseInt(readLine);
 		} catch (NumberFormatException e) {
@@ -55,15 +45,15 @@ public class RestartMenu implements MouseListener{
 		
 	}
 	
-	public void paint(Graphics g, ImageObserver io) {
+public void paint(Graphics g) {
 		
 		if(mouseOn && mouseDown) {
-			g.drawImage(restartMenuHit, x, y, width, height, io);
+			g.drawImage(restartMenuHit, x, y, 0, 0, width, height);
 		}
 		else {
-			g.drawImage(restartMenu, x, y, width, height, io);			
+			g.drawImage(restartMenu, x, y, 0, 0, width, height);			
 		}
-		g.drawRect(buttonX, buttonY, buttonWidth, buttonHeight);
+		g.drawRect(buttonX, buttonY, buttonWidth, buttonHeight, Color.GREEN);
 		
 	}
 	

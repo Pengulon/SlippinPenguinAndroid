@@ -1,21 +1,18 @@
 package com.ethanwong.slippinPenguin;
 
-import java.awt.Rectangle;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import android.graphics.Rect;
 
-public class StartingClass implements KeyListener{
+public class StartingClass {
 
 	private Penguin penguin;
 	private Walls wall[];
-	private Rectangle penguinBox = new Rectangle();
+	private Rect penguinBox = new Rect();
 	private boolean inRestart = false;
 	
 	public void start() {
 		
 		penguin = new Penguin();
-		penguinBox.height = 42;
-		penguinBox.width = 40;		
+		penguinBox.set(0, 0, 40, 40);
 		
 		wall = new Walls[5];
 		for(int i = 0; i < wall.length; i++) {
@@ -59,7 +56,7 @@ public class StartingClass implements KeyListener{
 	}
     
     public void checkCollision() {
-    	penguinBox.setLocation(penguin.getCenterX(), penguin.getCenterY());
+    	penguinBox.set(penguin.getX(), penguin.getY(), penguin.getWidth() + penguin.getX(), penguin.getHeight() + penguin.getY());
     	for(int i = 0; i < wall.length; i++) {
     		if(penguinBox.intersects(wall[i].getRleft()) || penguinBox.intersects(wall[i].getRright())) {
     			penguin.finish();
@@ -72,11 +69,11 @@ public class StartingClass implements KeyListener{
 		return penguin;
 	}
 
-	public Rectangle getPenguinBox() {
+	public Rect getPenguinBox() {
 		return penguinBox;
 	}
 
-	public void setPenguinBox(Rectangle penguinBox) {
+	public void setPenguinBox(Rect penguinBox) {
 		this.penguinBox = penguinBox;
 	}
 

@@ -7,8 +7,10 @@ import java.io.InputStreamReader;
 
 import android.util.Log;
 
+import com.ethanwong.framework.Graphics;
 import com.ethanwong.framework.Screen;
 import com.ethanwong.framework.implementation.AndroidGame;
+import com.ethanwong.slippinpenguinapp.R;
 
 public class PenguinGame extends AndroidGame implements Runnable {
 
@@ -129,7 +131,7 @@ public class PenguinGame extends AndroidGame implements Runnable {
 				
 				
 				if(sc.isInRestart()){ // This is called when the penguin has died.
-					currentSprite = characterHurt;
+					Assets.currentSprite = Assets.characterHurt;
 					rMenu = new RestartMenu();
 					addMouseListener(rMenu);
 					removeKeyListener(sc);
@@ -141,10 +143,10 @@ public class PenguinGame extends AndroidGame implements Runnable {
 					
 					++frameCounter;
 					if(frameCounter == 30) {
-						currentSprite = character2;
+						Assets.currentSprite = Assets.character2;
 					}
 					else if(frameCounter >= 60) {
-						currentSprite = character;
+						Assets.currentSprite = Assets.character;
 						frameCounter = 0;
 					}
 					
@@ -167,7 +169,6 @@ public class PenguinGame extends AndroidGame implements Runnable {
 		}
 	}
 	
-	@Override
 	public void stop() {
 		
 		bg1 = null;
@@ -183,58 +184,39 @@ public class PenguinGame extends AndroidGame implements Runnable {
 		thread = null;
 		
 	}
-
-	@Override
-	public void destroy() {
-		
-	}
 	
-	@Override
 	public void update(Graphics g) {
-		
-		if (image == null) {
-			image = createImage(this.getWidth(), this.getHeight());
-			second = image.getGraphics();
-		}
-		
-		second.setColor(getBackground());
-		second.fillRect(0, 0, getWidth(), getHeight());
-		second.setColor(getForeground());
-		paint(second);
-
-		g.drawImage(image, 0, 0, this);
 
 	}
 
-	@Override
 	public void paint(Graphics g) {
 		
-		g.drawImage(background, bg1.getBgX(), bg1.getBgY(), this);
+		g.drawImage(Assets.background, bg1.getBgX(), bg1.getBgY());
 
 		if(inGame && !inRestart) {
 			gamePaint(g);
-			scores.paint(g, 0, 0, this);
+			scores.paint(g, 0, 0);
 		}
 			
 		else if(inMenu) {
-			startButton.paint(g, this);
+			startButton.paint(g);
 		}
 		else if(inRestart) {
 			gamePaint(g);
-			rMenu.paint(g, this);
-			scores.paint(g, rMenu.getX() - 5, rMenu.getY() - 20, this);
-			scores.paint(g, rMenu.getX() - 5, rMenu.getY() + 90, highScore, this);
+			rMenu.paint(g);
+			scores.paint(g, rMenu.getX() - 5, rMenu.getY() - 20);
+			scores.paint(g, rMenu.getX() - 5, rMenu.getY() + 90, highScore);
 		}
 		
 	}
 	
 	public void gamePaint(Graphics g) {
 		
-		g.drawImage(currentSprite, sc.getPenguin().getCenterX(), sc.getPenguin().getCenterY(), this);
+		g.drawImage(Assets.currentSprite, sc.getPenguin().getCenterX(), sc.getPenguin().getCenterY());
 		
 		for(int i = 0; i < sc.getWall().length; i++) {
 			
-			g.drawImage(WallPic, sc.getWall()[i].getWallCenter(), sc.getWall()[i].getWally(), this);
+			g.drawImage(Assets.WallPic, sc.getWall()[i].getWallCenter(), sc.getWall()[i].getWally());
 			//g.drawRect(sc.getWall()[i].getRleft().x, sc.getWall()[i].getRleft().y, sc.getWall()[i].getRleft().width, sc.getWall()[i].getRleft().height);
 			//g.drawRect(sc.getWall()[i].getRright().x, sc.getWall()[i].getRright().y, sc.getWall()[i].getRright().width, sc.getWall()[i].getRright().height);
 			
@@ -250,7 +232,7 @@ public class PenguinGame extends AndroidGame implements Runnable {
 		removeMouseListener(rMenu);
 		rMenu = null;
 		inRestart = false;
-		currentSprite = character;
+		Assets.currentSprite = Assets.character;
 	}
 
 }
