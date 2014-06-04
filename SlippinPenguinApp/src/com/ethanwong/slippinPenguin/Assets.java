@@ -1,5 +1,7 @@
 package com.ethanwong.slippinPenguin;
 
+import android.graphics.Bitmap;
+
 import com.ethanwong.framework.Graphics;
 import com.ethanwong.framework.Image;
 import com.ethanwong.framework.Music;
@@ -8,8 +10,9 @@ import com.ethanwong.framework.Sound;
 public class Assets {
 
 	public static Image splash, menu, currentSprite, character, character2, 
-	characterHurt, background, WallPic, startPic, startHitPic, scorePic, 
-	rMenu, rMenuHit;
+	characterHurt, background, WallPic, startPic, startHitPic, rMenu, rMenuHit;
+
+	public static Bitmap scorePic[], scorePicMap;
 	
 	public static Graphics second;
 	

@@ -1,5 +1,7 @@
 package com.ethanwong.slippinPenguin;
 
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import com.ethanwong.framework.Game;
 import com.ethanwong.framework.Graphics;
 import com.ethanwong.framework.Graphics.ImageFormat;
@@ -22,7 +24,11 @@ public class LoadingScreen extends Screen {
         Assets.characterHurt = g.newImage("data/penguinDead.png", ImageFormat.ARGB4444);
         		
         Assets.WallPic = g.newImage("data/ice wall.png", ImageFormat.ARGB4444);
-        Assets.scorePic = g.newImage("data/iceNumbers.png", ImageFormat.ARGB4444);
+        Assets.scorePicMap = Bitmap.createBitmap(500, 130, Config.ARGB_4444);
+
+        for(int i = 0; i < 10; i++) {
+			Assets.scorePic[i] = Bitmap.createBitmap(Assets.scorePicMap, i*Constants.pixelWidth, 0, Constants.pixelWidth, Constants.pixelHeight);
+		}
         
         Assets.startPic = g.newImage("data/startbutton.png", ImageFormat.ARGB4444);
         Assets.startHitPic = g.newImage("data/startbuttonhit.png", ImageFormat.ARGB4444);

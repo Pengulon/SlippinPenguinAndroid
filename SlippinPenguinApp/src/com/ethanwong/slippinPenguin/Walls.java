@@ -1,6 +1,6 @@
 package com.ethanwong.slippinPenguin;
 
-import java.awt.Rectangle;
+import android.graphics.Rect;
 
 public class Walls {
 	
@@ -9,8 +9,8 @@ public class Walls {
 	private int speed = 1;
 	private static int wallPass = 0;
 	
-	private Rectangle rleft;
-	private Rectangle rright;
+	private Rect rleft;
+	private Rect rright;
 	
 	private int recHeight = 80;
 	private int recWidth = 500;
@@ -19,8 +19,8 @@ public class Walls {
 		
 		wallx = newInt();
 		wally = 0;
-		rleft = new Rectangle(wallx, wally, recWidth, recHeight);
-		rright = new Rectangle(wallx, wally, recWidth, recHeight);
+		rleft = new Rect(wallx, wally, recWidth, recHeight);
+		rright = new Rect(wallx, wally, recWidth, recHeight);
 		
 	}
 
@@ -41,8 +41,8 @@ public class Walls {
 	public void update() {
 		
 		wally += speed;
-		rleft.setLocation(wallx - 500, wally);
-		rright.setLocation(wallx + 100, wally);
+		rleft.set(wallx - 500, wally, wallx - 500 + recWidth, wally + recHeight);
+		rright.set(wallx + 100, wally, wallx + 100 + recWidth, wally + recHeight);
 		if(wally >= 900 ) {
 			reset();
 		}
@@ -72,19 +72,19 @@ public class Walls {
 		return wally;
 	}
 
-	public Rectangle getRleft() {
+	public Rect getRleft() {
 		return rleft;
 	}
 
-	public Rectangle getRright() {
+	public Rect getRright() {
 		return rright;
 	}
 
-	public void setRleft(Rectangle rleft) {
+	public void setRleft(Rect rleft) {
 		this.rleft = rleft;
 	}
 
-	public void setRright(Rectangle rright) {
+	public void setRright(Rect rright) {
 		this.rright = rright;
 	}
 

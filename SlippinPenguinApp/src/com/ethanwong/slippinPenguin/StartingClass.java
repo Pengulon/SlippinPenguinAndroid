@@ -58,7 +58,7 @@ public class StartingClass {
     public void checkCollision() {
     	penguinBox.set(penguin.getX(), penguin.getY(), penguin.getWidth() + penguin.getX(), penguin.getHeight() + penguin.getY());
     	for(int i = 0; i < wall.length; i++) {
-    		if(penguinBox.intersects(wall[i].getRleft()) || penguinBox.intersects(wall[i].getRright())) {
+    		if(penguinBox.intersect(wall[i].getRleft()) || penguinBox.intersect(wall[i].getRright())) {
     			penguin.finish();
     			inRestart = true;
     		}

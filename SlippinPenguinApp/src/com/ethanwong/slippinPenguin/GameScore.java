@@ -3,14 +3,16 @@ package com.ethanwong.slippinPenguin;
 import java.io.File;
 import java.io.IOException;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.widget.ImageView;
 
 import com.ethanwong.framework.Graphics;
 import com.ethanwong.framework.Image;
 
 public class GameScore {
 
-	private Image scoreNums[];
+	private Bitmap scoreNums[];
 	private double score;
 	private int pixelWidth = 50;
 	private int pixelHeight = 130;
@@ -21,11 +23,7 @@ public class GameScore {
 		score = 0;
 		x = 215;
 		y = 50;
-		scoreNums = new Image[10];
-		
-		for(int i = 0; i < 10; i++) {
-			scoreNums[i] = Assets.scorePic.getSubimage(i*pixelWidth, 0, pixelWidth, pixelHeight);
-		}
+		scoreNums = new Bitmap[10];
 
 	}
 	
