@@ -1,4 +1,4 @@
-package slippinPenguin;
+package com.ethanwong.slippinPenguin;
 
 import java.awt.Rectangle;
 

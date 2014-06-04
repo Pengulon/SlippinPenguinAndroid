@@ -1,59 +1,93 @@
-package slippinPenguin;
+package com.ethanwong.slippinPenguin;
 
-import java.applet.Applet;
-import java.awt.Color;
-import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.net.URL;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
-public class MainMenu extends Applet implements Runnable {
+import android.util.Log;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6751322658627545895L;
+import com.ethanwong.framework.Screen;
+import com.ethanwong.framework.implementation.AndroidGame;
+
+public class PenguinGame extends AndroidGame implements Runnable {
+
 	private StartingClass sc;
 	private RestartMenu rMenu;
 	private GameScore scores;
-	private Image image, currentSprite, character, character2, characterHurt, background, WallPic;
-	private Graphics second;
-	private URL base;
 	private static Background bg1;
 	private boolean inMenu, inGame, inRestart;
 	private Thread thread;
 	private int frameCounter = 0;
 	private int highScore;
 	private StartButton startButton;
+	
+	public static String map;
+	boolean firstTimeCreate = true;
 
 	@Override
+	public Screen getInitScreen() {
+		// TODO Auto-generated method stub
+		if (firstTimeCreate) {
+            Assets.load(this);
+            firstTimeCreate = false;
+        }
+
+        InputStream is = getResources().openRawResource(R.raw.map1);
+        map = convertStreamToString(is);
+
+        return new SplashLoadingScreen(this);
+
+	}
+	
+	@Override
+    public void onBackPressed() {
+        getCurrentScreen().backButton();
+    }
+	
+	private static String convertStreamToString(InputStream is) {
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+
+        String line = null;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append((line + "\n"));
+            }
+        } catch (IOException e) {
+            Log.w("LOG", e.getMessage());
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                Log.w("LOG", e.getMessage());
+            }
+        }
+        return sb.toString();
+    }
+	
+	@Override
+    public void onResume() {
+        super.onResume();
+        Assets.theme.play();
+        
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Assets.theme.pause();
+
+    }
+	
 	public void init() {
-
-		setSize(480, 800);
-		setBackground(Color.BLACK);
-		setFocusable(true);
-		Frame frame = (Frame) this.getParent().getParent();
-		frame.setTitle("Slippin Penguin");
-		try {
-			base = getDocumentBase();
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-
-		// Image Setups
-		character = getImage(base, "data/penguin1.png");
-		character2 = getImage(base, "data/penguin2.png");
-		characterHurt = getImage(base, "data/penguinDead.png");
-		currentSprite = character;
-		background = getImage(base, "data/background.png");
-		WallPic = getImage(base, "data/ice wall.png");
 		
 		inMenu = true;
 		inGame = false;
 		
 	}
 
-	@Override
 	public void start() {
 		
 		bg1 = new Background(0, 0);
@@ -84,8 +118,6 @@ public class MainMenu extends Applet implements Runnable {
 					inGame = true;
 					System.out.print("Gemu Hajimeru");
 					addKeyListener(sc);
-					setFocusable(true);
-					this.requestFocusInWindow();
 					startButton.setMouseClick(false);
 				}
 				
